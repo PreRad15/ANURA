@@ -36,7 +36,7 @@ export default function Inventory({ CommandBar }) {
 
         <div className="d-flex gap-4 justify-content-end mb-3">
           <Link
-            className="pill-btn"
+            className="pilrl-btn"
             to="/add"
             style={{ background: "var(--add-badge)" }}
           >

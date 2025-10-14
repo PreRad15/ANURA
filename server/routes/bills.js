@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
         let total = 0;
         let productCount = 0;
 
-        // Step 1: Validate all items and calculate totals before making any database changes.
+        // Validate all items and calculate totals before making any database changes.
         for (const it of itemsReq) {
             const p = await Product.findOne({ itemNo: String(it.itemNo) });
             if (!p) {
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
             billItems.push({ itemNo: p.itemNo, name: p.name, price: p.price, qty: it.qty });
         }
         
-        // Step 2: If all validations passed, update the product quantities in the database.
+        // If all validations passed, update the product quantities in the database.
         for (const it of itemsReq) {
              await Product.updateOne(
                 { itemNo: String(it.itemNo) },
@@ -44,14 +44,14 @@ router.post("/", async (req, res) => {
             );
         }
 
-        // Step 3: Create the bill document.
+        // Create the bill document.
         const tax = total * TAX;
         const grandTotal = total + tax;
         const last = await Bill.findOne().sort({ number: -1 });
         const number = (last?.number || 1503) + 1; // Start bill numbers from 1504
         const bill = await Bill.create({ number, items: billItems, total, tax, grandTotal });
 
-        // Step 4: Update the daily sales report.
+        // Update the daily sales report.
         const dateKey = fmtDate(bill.date);
         await Sale.updateOne(
             { date: dateKey },
